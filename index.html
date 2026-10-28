@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OUGER | اوگر</title>
+<style>
+:root{
+  --bg:#0a0a12;--panel:#151522;--panel2:#1d1d2d;
+  --pink:#ff3e91;--purple:#8b5cf6;--text:#f6f3ff;
+  --muted:#a7a4ba;--border:#303047;--green:#39d98a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:radial-gradient(circle at top,#21152f,var(--bg) 55%);
+  color:var(--text);font-family:Tahoma,Arial,sans-serif;min-height:100vh;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+header{
+  position:sticky;top:0;z-index:10;background:#0c0b14ee;
+  backdrop-filter:blur(15px);border-bottom:1px solid var(--border);
+  padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:15px;
+}
+.logo{font-size:27px;font-weight:900;letter-spacing:2px;color:var(--pink)}
+.logo span{color:white}
+nav{display:flex;gap:7px;flex-wrap:wrap}
+nav button,.secondary{
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--text);padding:10px 13px;border-radius:12px;
+}
+nav button:hover,.secondary:hover{border-color:var(--pink)}
+.primary{
+  border:0;border-radius:12px;padding:12px 18px;color:white;font-weight:bold;
+  background:linear-gradient(120deg,var(--pink),var(--purple));
+}
+main{max-width:1150px;margin:auto;padding:26px 18px 70px}
+.page{display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{
+  padding:55px 25px;text-align:center;border:1px solid var(--border);
+  border-radius:26px;background:linear-gradient(135deg,#25172e,#141421);
+}
+.hero h1{font-size:clamp(35px,7vw,68px);margin:0 0 15px}
+.hero h1 span{color:var(--pink)}
+.hero p{color:var(--muted);line-height:2}
+.notice{
+  padding:13px 15px;border-radius:13px;border:1px solid #4b3566;
+  background:#21182e;color:#ddd1ff;line-height:1.9;margin:15px 0;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:19px;padding:18px;overflow:hidden;
+}
+.card h3{margin-top:7px}
+.muted{color:var(--muted);font-size:14px;line-height:1.9}
+.profile-card{padding:0}
+.profile-card img{width:100%;height:255px;object-fit:cover;background:var(--panel2)}
+.profile-info{padding:16px}
+.tag{display:inline-block;background:#30213d;color:#ffc3e0;border-radius:20px;padding:6px 10px;font-size:12px;margin:3px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.actions button{flex:1}
+.field{display:flex;flex-direction:column;gap:8px;margin:13px 0}
+.field label{font-size:14px;color:#d9d4e9}
+input,select,textarea{
+  width:100%;background:#10101a;color:white;border:1px solid var(--border);
+  border-radius:11px;padding:12px;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--pink)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.status{padding:20px;text-align:center;border-radius:15px;background:#10101a;margin:15px 0}
+.big-icon{font-size:48px}
+.online{color:var(--green)}
+.chatbox{height:260px;overflow:auto;background:#0e0e18;border-radius:14px;padding:14px}
+.message{background:#28203a;padding:10px 12px;border-radius:12px;margin:8px 0;max-width:85%}
+.message.mine{background:#56244b;margin-right:auto}
+footer{text-align:center;border-top:1px solid var(--border);padding:25px;color:var(--muted);font-size:13px}
+#login{
+  min-height:100vh;display:grid;place-items:center;padding:20px;
+}
+.login-box{width:min(420px,100%);text-align:center;background:var(--panel);
+  padding:30px;border:1px solid var(--border);border-radius:24px}
+hr{border:0;border-top:1px solid var(--border);margin:20px 0}
+.small{font-size:12px;color:var(--muted)}
+@media(max-width:650px){
+ header{align-items:flex-start;flex-direction:column}
+ nav{width:100%}nav button{flex:1;font-size:12px;padding:9px 5px}
+ main{padding:18px 12px 50px}
+ .hero{padding:38px 15px}
+}
+</style>
+</head>
+<body>
+
+<!-- صفحه ورود -->
+<section id="login">
+  <div class="login-box">
+    <div class="logo">OU<span>GER</span></div>
+    <p class="muted">به فضای گفت‌وگوی اوگر خوش آمدید</p>
+    <div class="notice">این نسخه آزمایشی است و برای افراد ۱۸ سال به بالا طراحی شده است.</div>
+    <div class="field">
+      <label for="password">رمز ورود</label>
+      <input id="password" type="password" placeholder="رمز را وارد کنید">
+    </div>
+    <button class="primary" style="width:100%" onclick="login()">ورود به سایت</button>
+    <p id="loginError" style="color:#ff6c9f"></p>
+    <p class="small">رمز نمایشی این نسخه: admin</p>
+  </div>
+</section>
+
+<!-- محتوای سایت -->
+<div id="app" class="hidden">
+<header>
+  <div class="logo">OU<span>GER</span></div>
+  <nav>
+    <button onclick="showPage('home')">خانه</button>
+    <button onclick="showPage('random')">چت تصادفی</button>
+    <button onclick="showPage('discover')">کشف افراد</button>
+    <button onclick="showPage('nearby')">افراد نزدیک</button>
+    <button onclick="showPage('filters')">علایق</button>
+    <button onclick="showPage('live')">اتاق لایو</button>
+    <button onclick="showPage('vip')">VIP</button>
+    <button onclick="showPage('profile')">پروفایل من</button>
+    <button onclick="showPage('wallet')">کیف پول</button>
+  </nav>
+</header>
+
+<main>
+<!-- خانه -->
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="tag">ارتباط • کشف • گفت‌وگو</div>
+    <h1>دنیای خودت را در <span>اوگر</span> پیدا کن</h1>
+    <p>با افراد جدید آشنا شو، پروفایل‌ها را کشف کن و علایق مشترک پیدا کن.</p>
+    <button class="primary" onclick="showPage('discover')">کشف پروفایل‌ها</button>
+    <button class="secondary" onclick="showPage('random')">شروع چت تصادفی</button>
+  </div>
+
+  <div class="notice">
+    <b>نکته:</b> این سایت یک نمونه فرانت‌اند است. پروفایل‌ها، پیام‌ها، لایو،
+    موقعیت مکانی و پرداخت واقعی بدون سرور و اتصال به سرویس‌های مربوطه فعال نمی‌شوند.
+  </div>
+
+  <h2>امکانات اوگر</h2>
+  <div class="grid">
+    <div class="card"><div class="big-icon">💬</div><h3>چت تصادفی</h3><p class="muted">نمایش وضعیت جست‌وجو و نمونه محیط چت.</p><button class="primary" onclick="showPage('random')">ورود به چت</button></div>
+    <div class="card"><div class="big-icon">💜</div><h3>کشف پروفایل</h3><p class="muted">مرور پروفایل‌ها و انتخاب پسندیدن یا رد کردن.</p><button class="primary" onclick="showPage('discover')">مشاهده</button></div>
+    <div class="card"><div class="big-icon">📍</div><h3>افراد نزدیک</h3><p class="muted">درخواست اجازه مکان؛ نتایج این نسخه نمونه هستند.</p><button class="primary" onclick="showPage('nearby')">مشاهده</button></div>
+    <div class="card"><div class="big-icon">👑</div><h3>عضویت VIP</h3><p class="muted">صفحه معرفی اشتراک و نمایش مراحل پرداخت آزمایشی.</p><button class="primary" onclick="showPage('vip')">مشاهده VIP</button></div>
+  </div>
+</section>
+
+<!-- چت تصادفی -->
+<section id="random" class="page">
+  <h2>💬 چت تصادفی</h2>
+  <p class="muted">جست‌وجوی نمایشی برای یافتن یک گفت‌وگوی جدید.</p>
+  <div class="card">
+    <div class="status">
+      <div class="big-icon">🔎</div>
+      <h3 id="searchStatus">آماده شروع</h3>
+      <p class="muted" id="searchDescription">برای شروع روی دکمه زیر بزن.</p>
+      <button class="primary" id="searchButton" onclick="startSearch()">شروع جست‌وجو</button>
+    </div>
+    <div id="chatArea" class="hidden">
+      <h3 id="chatPartner">کاربر آزمایشی</h3>
+      <div class="chatbox" id="chatMessages">
+        <div class="message">سلام! این یک پیام نمونه است.</div>
+      </div>
+      <div class="row">
+        <input id="chatInput" placeholder="پیام خود را بنویس..." onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="primary" onclick="sendMessage()">ارسال</button>
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="nextPartner()">کاربر بعدی</button>
+        <button class="secondary" onclick="stopSearch()">پایان چت</button>
+      </div>
+    </div>
+  </div>
+  <div class="notice">پیام‌ها در این نمونه فقط داخل همین صفحه نمایش داده می‌شوند و به کاربر واقعی ارسال نمی‌شوند.</div>
+</section>
+
+<!-- کشف پروفایل -->
+<section id="discover" class="page">
+  <h2>💜 کشف افراد</h2>
+  <p class="muted">پروفایل‌های نمونه را ببین و با دکمه‌ها انتخاب کن.</p>
+  <div id="discoverCard" class="card profile-card" style="max-width:430px;margin:auto">
+    <img id="discoverImage" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800" alt="تصویر نمونه پروفایل">
+    <div class="profile-info">
+      <h2 id="discoverName">آوا، ۲۵</h2>
+      <p class="muted" id="discoverDetails">استانبول، ترکیه · ۱۶۸ سانتی‌متر</p>
+      <span class="tag">موسیقی</span><span class="tag">سفر</span>
+      <div class="actions">
+        <button class="secondary" onclick="swipe(-1)">✕ رد کردن</button>
+        <button class="primary" onclick="swipe(1)">♥ پسندیدن</button>
+      </div>
+    </div>
+  </div>
+  <p id="swipeFeedback" class="status">برای مرور پروفایل بعدی انتخاب کن.</p>
+</section>
+
+<!-- افراد نزدیک -->
+<section id="nearby" class="page">
+  <h2>📍 افراد نزدیک</h2>
+  <p class="muted">برای قابلیت مکانی، مرورگر ممکن است اجازه دسترسی به موقعیت بخواهد.</p>
+  <div class="card">
+    <button class="primary" onclick="requestLocation()">درخواست دسترسی به موقعیت</button>
+    <p id="locationStatus" class="notice">موقعیت شما بدون اجازه مرورگر درخواست نمی‌شود.</p>
+  </div>
+  <h3>پروفایل‌های نمونه</h3>
+  <div class="grid" id="nearbyGrid"></div>
+  <p class="small">این فهرست نمایشی است و فاصله واقعی افراد را نشان نمی‌دهد.</p>
+</section>
+
+<!-- فیلتر علایق -->
+<section id="filters" class="page">
+  <h2>🎯 فیلتر جست‌وجو و علایق</h2>
+  <p class="muted">گزینه‌ها برای تنظیم نمونه جست‌وجو هستند؛ نتیجه واقعی به سرور نیاز دارد.</p>
+  <div class="card">
+    <div class="row">
+      <div class="field">
+        <label>گرایش / نوع ارتباط</label>
+        <select id="orientation">
+          <option>بدون ترجیح</option>
+          <option>دگرجنس‌گرا</option><option>همجنس‌گرا</option>
+          <option>لزبین</option><option>دوجنس‌گرا</option>
+          <option>پنسکشوال</option><option>ترجیح می‌دهم نگویم</option>
+          <option>دوستی و گفت‌وگو</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>سن از</label>
+        <select id="ageMin"><option>18</option><option>20</option><option>25</option><option>30</option><option>35</option><option>40</option></select>
+      </div>
+      <div class="field">
+        <label>سن تا</label>
+        <select id="ageMax"><option>25</option><option>30</option><option>35</option><option>40</option><option>50</option><option>60</option></select>
+      </div>
+      <div class="field">
+        <label>جنسیت</label>
+        <select id="gender"><option>همه</option><option>زن</option><option>مرد</option><option>غیردودویی</option><option>ترجیح می‌دهم نگویم</option></select>
+      </div>
+      <div class="field">
+        <label>شهر</label>
+        <select id="city">
+          <option>همه شهرها</option><option>استانبول</option><option>آنکارا</option>
+          <option>ازمیر</option><option>تهران</option><option>شیراز</option>
+          <option>دبی</option><option>لندن</option><option>برلین</option>
+          <option>پاریس</option><option>تورنتو</option><option>نیویورک</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>قد</label>
+        <select id="height"><option>مهم نیست</option><option>زیر 160</option><option>160 تا 170</option><option>171 تا 180</option><option>بیشتر از 180</option></select>
+      </div>
+    </div>
+    <hr>
+    <h3>علایق و نقش‌ها (فقط بزرگسالان)</h3>
+    <div class="row">
+      <label><input type="checkbox" class="interest" value="فوت فتیش"> فوت فتیش</label>
+      <label><input type="checkbox" class="interest" value="مستر / میسترس"> مستر / میسترس</label>
+      <label><input type="checkbox" class="interest" value="ساب"> ساب</label>
+      <label><input type="checkbox" class="interest" value="دام"> دام</label>
+      <label><input type="checkbox" class="interest" value="سوئیچ"> سوئیچ</label>
+      <label><input type="checkbox" class="interest" value="BDSM توافقی"> BDSM توافقی</label>
+      <label><input type="checkbox" class="interest" value="رول‌پلی بزرگسالان"> رول‌پلی بزرگسالان</label>
+      <label><input type="checkbox" class="interest" value="موسیقی"> موسیقی</label>
+      <label><input type="checkbox" class="interest" value="سفر"> سفر</label>
+      <label><input type="checkbox" class="interest" value="ورزش"> ورزش</label>
+      <label><input type="checkbox" class="interest" value="دوستی"> دوستی</label>
+    </div>
+    <div class="actions">
+      <button class="primary" onclick="applyFilters()">اعمال فیلترها</button>
+      <button class="secondary" onclick="resetFilters()">پاک کردن</button>
+    </div>
+    <div id="filterResult" class="notice">هنوز فیلتری اعمال نشده است.</div>
+  </div>
+</section>
+
+<!-- اتاق لایو -->
+<section id="live" class="page">
+  <h2>🔴 اتاق لایو میسترس</h2>
+  <div class="card" style="text-align:center">
+    <div class="big-icon">🎥</div>
+    <h3>اتاق لایو میسترس</h3>
+    <p class="muted">اتاق نمایشی برای معرفی قابلیت لایو و حمایت اختیاری.</p>
+    <div class="status">
+      <span class="tag">اتاق آزمایشی</span>
+      <p>پخش زنده در این نسخه فعال نیست.</p>
+    </div>
+    <h3>حمایت نمایشی</h3>
+    <div class="actions" style="justify-content:center">
+      <button class="secondary" onclick="donate(1)">۱ TON</button>
+      <button class="secondary" onclick="donate(5)">۵ TON</button>
+      <button class="secondary" onclick="donate(10)">۱۰ TON</button>
+    </div>
+    <p id="donateStatus" class="notice">برای نمایش وضعیت حمایت، یک مبلغ انتخاب کن.</p>
+  </div>
+</section>
+
+<!-- VIP -->
+<section id="vip" class="page">
+  <h2>👑 عضویت VIP</h2>
+  <p class="muted">طرح‌های نمونه اشتراک اوگر.</p>
+  <div class="grid">
+    <div class="card">
+      <span class="tag">رایگان</span><h3>عضویت پایه</h3>
+      <h2>رایگان</h2>
+      <p class="muted">مرور بخش‌های نمونه و استفاده آزمایشی از رابط کاربری.</p>
+      <button class="secondary" onclick="showPage('discover')">ادامه</button>
+    </div>
+    <div class="card" style="border-color:var(--pink)">
+      <span class="tag">ویژه</span><h3>VIP یک‌ماهه</h3>
+      <h2>۵ TON</h2>
+      <p class="muted">قیمت و امکانات نمونه هستند؛ فعال‌سازی واقعی انجام نمی‌شود.</p>
+      <button class="primary" onclick="showPage('wallet')">ادامه به پرداخت</button>
+    </div>
+    <div class="card">
+      <span class="tag">ویژه</span><h3>VIP سه‌ماهه</h3>
+      <h2>۱۲ TON</h2>
+      <p class="muted">برای نمونه‌سازی طرح اشتراک.</p>
+      <button class="primary" onclick="showPage('wallet')">ادامه به پرداخت</button>
+    </div>
+  </div>
+</section>
+
+<!-- پروفایل -->
+<section id="profile" class="page">
+  <h2>👤 ثبت‌نام و پروفایل من</h2>
+  <p class="muted">اطلاعات این فرم در این نسخه فقط در صفحه نمایش داده می‌شود و در سرور ذخیره نمی‌شود.</p>
+  <div class="card">
+    <form id="profileForm" onsubmit="saveProfile(event)">
+      <div class="row">
+        <div class="field"><label>نام نمایشی</label><input id="myName" required maxlength="40" placeholder="نام یا لقب"></div>
+        <div class="field"><label>سن (حداقل ۱۸)</label><input id="myAge" type="number" required min="18" max="99" placeholder="سن"></div>
+        <div class="field"><label>شهر</label><input id="myCity" placeholder="مثلاً استانبول"></div>
+        <div class="field"><label>قد به سانتی‌متر</label><input id="myHeight" type="number" min="100" max="250" placeholder="مثلاً 170"></div>
+        <div class="field"><label>جنسیت</label><select id="myGender"><option>ترجیح می‌دهم نگویم</option><option>زن</option><option>مرد</option><option>غیردودویی</option></select></div>
+        <div class="field"><label>گرایش</label><select id="myOrientation"><option>ترجیح می‌دهم نگویم</option><option>دگرجنس‌گرا</option><option>همجنس‌گرا</option><option>لزبین</option><option>دوجنس‌گرا</option><option>پنسکشوال</option></select></div>
+      </div>
+      <div class="field"><label>درباره من</label><textarea id="myBio" rows="4" maxlength="500" placeholder="چند جمله درباره خودت..."></textarea></div>
+      <div class="field"><label>آدرس عکس پروفایل (اختیاری)</label><input id="myPhoto" type="url" placeholder="https://example.com/photo.jpg"></div>
+      <button class="primary" type="submit">نمایش پروفایل</button>
+    </form>
+  </div>
+  <div id="myProfilePreview" class="card hidden" style="margin-top:18px">
+    <h3 id="previewName"></h3><p id="previewDetails" class="muted"></p>
+    <img id="previewPhoto" class="hidden" alt="عکس پروفایل" style="max-width:220px;width:100%;border-radius:15px">
+    <p id="previewBio"></p>
+  </div>
+</section>
+
+<!-- کیف پول -->
+<section id="wallet" class="page">
+  <h2>💎 کیف پول و پرداخت TON</h2>
+  <div class="notice">
+    این صفحه پرداخت واقعی انجام نمی‌دهد. انتقال TON را فقط پس از ساخت بک‌اند امن،
+    بررسی تراکنش در شبکه و تأیید مبلغ و آدرس فعال کن.
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3>موجودی نمایشی</h3><div style="font-size:35px">0 TON</div>
+      <p class="muted">موجودی واقعی به کیف پول متصل نیست.</p>
+    </div>
+    <div class="card">
+      <h3>پرداخت اشتراک</h3>
+      <p class="muted">آدرس کیف پول مقصد:</p>
+      <input id="tonAddress" readonly value="UQC60I-MCcAjq2EB2voZTByspcg0UUy_7WS_IoC5S-B6nNpo">
+      <div class="actions">
+        <button class="secondary" onclick="copyAddress()">کپی آدرس</button>
+        <button class="primary" onclick="paymentPending()">پرداخت کردم</button>
+      </div>
+      <p id="paymentStatus" class="notice">پس از انتقال واقعی، وضعیت تراکنش باید توسط سرور بررسی شود.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer>
+  OUGER © 2026 · نسخه نمایشی · استفاده فقط برای افراد ۱۸ سال به بالا
+  <br>برای راه‌اندازی واقعی، سرور امن، احراز هویت، مدیریت محتوا و تأیید تراکنش نیاز است.
+</footer>
+</div>
+
+<script>
+const PASSWORD = "admin";
+
+function login(){
+  const p=document.getElementById("password").value;
+  if(p===PASSWORD){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+    showPage("home");
+  }else{
+    document.getElementById("loginError").textContent="رمز واردشده صحیح نیست.";
+  }
+}
+document.getElementById("password").addEventListener("keydown",e=>{
+  if(e.key==="Enter")login();
+});
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  const target=document.getElementById(id);
+  if(target)target.classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+let searchTimer=null;
+function startSearch(){
+  const status=document.getElementById("searchStatus");
+  const desc=document.getElementById("searchDescription");
+  const btn=document.getElementById("searchButton");
+  status.textContent="در حال جستجو...";
+  desc.textContent="در حال بررسی کاربران نمونه؛ این فرایند واقعی نیست.";
+  btn.disabled=true;
+  btn.textContent="در حال جستجو...";
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>{
+    status.textContent="کاربر نمونه پیدا شد";
+    desc.textContent="محیط چت نمایشی آماده است.";
+    btn.disabled=false;
+    btn.textContent="جست‌وجوی دوباره";
+    document.getElementById("chatArea").classList.remove("hidden");
+    document.getElementById("chatPartner").textContent="کاربر نمونه";
+  },1300);
+}
+function stopSearch(){
+  clearTimeout(searchTimer);
+  document.getElementById("chatArea").classList.add("hidden");
+  document.getElementById("searchStatus").textContent="جست‌وجو متوقف شد";
+  document.getElementById("searchDescription").textContent="هر زمان خواستی دوباره شروع کن.";
+  const btn=document.getElementById("searchButton");
+  btn.disabled=false;btn.textContent="شروع جست‌وجو";
+}
+function sendMessage(){
+  const input=document.getElementById("chatInput");
+  const value=input.value.trim();
+  if(!value)return;
+  const box=document.getElementById("chatMessages");
+  const msg=document.createElement("div");
+  msg.className="message mine";
+  msg.textContent=value;
+  box.appendChild(msg);
+  input.value="";
+  box.scrollTop=box.scrollHeight;
+}
+function nextPartner(){
+  document.getElementById("chatMessages").innerHTML='<div class="message">گفت‌وگوی نمونه جدید شروع شد.</div>';
+  document.getElementById("chatPartner").textContent="کاربر نمونه جدید";
+}
+
+const people=[
+ {name:"آوا",age:25,city:"استانبول",height:168,gender:"زن",img:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800",interests:["موسیقی","سفر"]},
+ {name:"آرین",age:29,city:"تهران",height:180,gender:"مرد",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800",interests:["ورزش","سفر"]},
+ {name:"سارا",age:23,city:"ازمیر",height:165,gender:"زن",img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800",interests:["هنر","موسیقی"]},
+ {name:"دنیز",age:31,city:"آنکارا",height:174,gender:"غیردودویی",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800",interests:["کتاب","سفر"]}
+];
+let personIndex=0;
+
+function renderPerson(){
+  const p=people[personIndex%people.length];
+  document.getElementById("discoverImage").src=p.img;
+  document.getElementById("discoverName").textContent=p.name+"، "+p.age;
+  document.getElementById("discoverDetails").textContent=p.city+" · "+p.height+" سانتی‌متر";
+  document.getElementById("swipeFeedback").textContent="پروفایل "+(personIndex+1)+" از "+people.length;
+}
+function swipe(choice){
+  const p=people[personIndex%people.length];
+  document.getElementById("swipeFeedback").textContent=
+    choice===1?"پروفایل "+p.name+" پسندیده شد (نمایشی).":"پروفایل "+p.name+" رد شد (نمایشی).";
+  personIndex=(personIndex+1)%people.length;
+  renderPerson();
+}
+
+function renderNearby(){
+  const grid=document.getElementById("nearbyGrid");
+  grid.innerHTML="";
+  people.forEach(p=>{
+    const card=document.createElement("div");
+    card.className="card";
+    const img=document.createElement("img");
+    img.src=p.img;img.alt="تصویر نمونه";img.style="width:100%;height:180px;object-fit:cover;border-radius:12px";
+    const title=document.createElement("h3");
+    title.textContent=p.name+", "+p.age;
+    const detail=document.createElement("p");
+    detail.className="muted";detail.textContent=p.city+" · فاصله نامشخص";
+    card.append(img,title,detail);grid.appendChild(card);
+  });
+}
+function requestLocation(){
+  const out=document.getElementById("locationStatus");
+  if(!navigator.geolocation){
+    out.textContent="مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.";return;
+  }
+  out.textContent="در حال درخواست اجازه موقعیت...";
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      out.textContent="موقعیت دریافت شد. این نمونه مختصات را فقط در صفحه نشان نمی‌دهد و افراد واقعی را پیدا نمی‌کند. برای جست‌وجوی واقعی، سرور و رضایت کاربران لازم است.";
+    },
+    err=>{
+      out.textContent="موقعیت دریافت نشد؛ ممکن است اجازه نداده باشید یا صفحه باید از HTTPS اجرا شود.";
+    },
+    {enableHighAccuracy:false,timeout:10000}
+  );
+}
+function applyFilters(){
+  const interests=[...document.querySelectorAll(".interest:checked")].map(x=>x.value);
+  const data={
+    orientation:document.getElementById("orientation").value,
+    ageMin:document.getElementById("ageMin").value,
+    ageMax:document.getElementById("ageMax").value,
+    gender:document.getElementById("gender").value,
+    city:document.getElementById("city").value,
+    height:document.getElementById("height").value,
+    interests
+  };
+  document.getElementById("filterResult").textContent=
+    "فیلترهای انتخاب‌شده: "+JSON.stringify(data,null,2);
+}
+function resetFilters(){
+  document.querySelectorAll(".interest").forEach(x=>x.checked=false);
+  ["orientation","ageMin","ageMax","gender","city","height"].forEach(id=>{
+    document.getElementById(id).selectedIndex=0;
+  });
+  document.getElementById("filterResult").textContent="فیلترها پاک شدند.";
+}
+function donate(amount){
+  document.getElementById("donateStatus").textContent=
+    "حمایت "+amount+" TON انتخاب شد. این فقط نمایش آزمایشی است و تراکنشی انجام نشده.";
+}
+function saveProfile(event){
+  event.preventDefault();
+  const age=Number(document.getElementById("myAge").value);
+  if(age<18){alert("این سایت فقط برای افراد ۱۸ سال به بالا است.");return;}
+  const name=document.getElementById("myName").value.trim();
+  const city=document.getElementById("myCity").value.trim();
+  const height=document.getElementById("myHeight").value;
+  const gender=document.getElementById("myGender").value;
+  const orientation=document.getElementById("myOrientation").value;
+  const bio=document.getElementById("myBio").value.trim();
+  const photo=document.getElementById("myPhoto").value.trim();
+
+  document.getElementById("previewName").textContent=name+", "+age;
+  document.getElementById("previewDetails").textContent=
+    [city,height?height+" سانتی‌متر":"",gender,orientation].filter(Boolean).join(" · ");
+  document.getElementById("previewBio").textContent=bio;
+  const img=document.getElementById("previewPhoto");
+  if(photo){
+    img.src=photo;img.classList.remove("hidden");
+    img.onerror=()=>{img.classList.add("hidden");};
+  }else img.classList.add("hidden");
+  document.getElementById("myProfilePreview").classList.remove("hidden");
+}
+function copyAddress(){
+  const address=document.getElementById("tonAddress").value;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(address).then(()=>{
+      document.getElementById("paymentStatus").textContent="آدرس کپی شد. پیش از ارسال، آدرس و شبکه را بررسی کن.";
+    }).catch(()=>fallbackCopy(address));
+  }else fallbackCopy(address);
+}
+function fallbackCopy(text){
+  const el=document.getElementById("tonAddress");
+  el.select();el.setSelectionRange(0,99999);
+  try{
+    document.execCommand("copy");
+    document.getElementById("paymentStatus").textContent="تلاش برای کپی انجام شد؛ آدرس را پیش از ارسال بررسی کن.";
+  }catch(e){
+    document.getElementById("paymentStatus").textContent="آدرس را به‌صورت دستی کپی کن.";
+  }
+}
+function paymentPending(){
+  document.getElementById("paymentStatus").textContent=
+    "لطفاً منتظر بمانید… در نسخه نمایشی، تراکنش بررسی یا تأیید نمی‌شود و VIP فعال نشده است.";
+}
+renderPerson();
+renderNearby();
+</script>
+</body>
+</html>
